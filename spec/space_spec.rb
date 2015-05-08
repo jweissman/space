@@ -20,7 +20,7 @@ describe Viewport do
   end
 
   it 'should adjust positions accordingly' do
-    image = mock(:sprite)
+    image = double(:sprite)
     expect(image).to receive(:draw_rot).with(330,250,1,0)
     subject.render(image,10,10)
   end

@@ -2,6 +2,9 @@ module Space
   class Ship < Model
     attr_reader :theta, :velocity
 
+    # how many ticks between possible weapon firings
+    def rate_of_fire; 100 end
+
     def move(decel=0.03)
       @velocity ||= 0
       @velocity -= decel

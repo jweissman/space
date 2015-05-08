@@ -13,6 +13,9 @@ require 'space/ship_view'
 require 'space/star'
 require 'space/star_view'
 
+require 'space/bullet'
+require 'space/bullet_view'
+
 require 'space/universe'
 require 'space/game_engine'
 require 'space/game'
