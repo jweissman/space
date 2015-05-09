@@ -1,61 +1,75 @@
 module Space
+
   class GameEngine
-    attr_reader :player_view, :view_manager
+    attr_reader :tick, :models
+    attr_reader :player, :view_manager
+    
+
+    STAR_COUNT = 100
 
     def initialize(game)
       @game = game
+      @models = []
 
+      # puts "--- Creating new viewport with dimensions #{@game.width}x#{@game.height}"
       @view_manager = Viewport.new(@game.width, @game.height)
 
       @player = Ship.new
-      @player_view = ShipView.new(game, @player, @view_manager)
+      add_model @player
 
-      @bullets = []
-      @bullet_views = []
+      @enemy_ship = EnemyShip.new
+      add_model @enemy_ship
 
-      @starfield = Array.new(100) do 
+      @starfield = Array.new(STAR_COUNT) do 
 	x, y = Universe.random_location
+	print '.'
 	Star.new(x,y)
       end
 
-      @starfield_views = @starfield.map do |star|
-	StarView.new(game, star, @view_manager)
-      end
-
-      @t = 0
+      @starfield.each(&method(:add_model))
+      @tick = 0
     end
 
-    def tick(game)
-      @t = @t + 1
-      puts "--- engine tick!"
-      if game.button_down?(Gosu::KbLeft)
-	@player.turn(:left)
-      elsif game.button_down?(Gosu::KbRight)
-	@player.turn(:right)
-      elsif game.button_down?(Gosu::KbUp)
-	@player.accelerate
-      elsif game.button_down?(Gosu::KbSpace)
-	@last_fired ||= 0
-	if @t - @last_fired > @player.rate_of_fire
-	  bullet = Bullet.new(@player.x,@player.y,@player.theta)
-	  @bullets << bullet
-	  @bullet_views << BulletView.new(game, bullet, @view_manager)
-	  @last_fired = @t
-	end
-      end
+    def add_model(model)
+      @models << model
+      self
+    end
 
-      @player.move
-      @bullets.each(&:move)
+    def step
+      @tick = @tick + 1
+      @models.each(&method(:update_model))
     end
 
     def render
       x,y = @player.x, @player.y
       @view_manager.recenter(x,y)
+      visible_models.each(&method(:render_model))
+      self
+    end
 
-      @player_view.render
-      @starfield_views.each(&:render)
-      @bullet_views.each(&:render)
+    protected
+
+    def visible_models
+      @models.select(&method(:visible?))
+    end
+
+    def visible?(model)
+      @view_manager.should_draw?(model)
+    end
+
+    def update_model(model)
+      model.update(@game, self)
+    end
+
+    def render_model(model)
+      view_for_model(model).render if @view_manager.should_draw?(model)
+      self
+    end
+
+    def view_for_model(model)
+      @views ||= {}
+      @views[model.class] ||= {}
+      @views[model.class][model.id] ||= eval("#{model.class.name}View").new(@game, model, @view_manager)
     end
   end
-
 end

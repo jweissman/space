@@ -3,7 +3,7 @@ module Space
     attr_reader :theta, :velocity #, :lifetime
 
     def move
-      @velocity ||= 10.0
+      #@velocity ||= 10.0
       #@lifetime ||= 50
 
       # @lifetime = @lifetime - 1

@@ -1,24 +1,21 @@
+require 'securerandom'
+
 require 'gosu'
 
 require 'space/version'
-require 'space/z_order'
-
 require 'space/model'
+require 'space/z_order'
 require 'space/view'
+require 'space/animated_view'
 require 'space/viewport'
+require 'space/game_engine'
+require 'space/game'
 
 require 'space/ship'
 require 'space/ship_view'
 
-require 'space/star'
-require 'space/star_view'
-
-require 'space/bullet'
-require 'space/bullet_view'
-
-require 'space/universe'
-require 'space/game_engine'
-require 'space/game'
+require 'space/exploration'
+require 'space/combat'
 
 module Space
   include ZOrder

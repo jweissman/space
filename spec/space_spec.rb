@@ -39,10 +39,10 @@ describe Ship do
   describe '#turn' do
     it 'should change the angle by the given rate' do
       subject.turn(:left)
-      expect(subject.theta).to eql(6)
+      expect(subject.theta).to eql(2.4)
 
       subject.turn(:right,12)
-      expect(subject.theta).to eql(-6)
+      expect(subject.theta).to eql(-9.6)
     end
   end
 
@@ -53,24 +53,33 @@ describe Ship do
     end
   end
 
-  describe '#move' do
+  let(:game) do
+    double(:game, { :button_down? => false })
+  end
+
+  let(:engine) do
+    double(:engine)
+  end
+
+  describe '#update' do
     let(:accel) { 1 }
     let(:decel) { 0.1 }
 
     before do 
       subject.turn(:left)
       subject.accelerate(accel)
-      subject.move(decel) 
+      subject.update(game, engine) # double, double) #(decel) 
     end
 
     it 'should decay velocity' do
-      expect(subject.velocity).to eql(accel - decel)
+      expect(subject.velocity).to eql(accel - subject.rate_of_deceleration)
     end
 
-    it 'should change position' do
-      expect(subject.x).to eql(Gosu::offset_x(subject.theta, subject.velocity))
-      expect(subject.y).to eql(Gosu::offset_y(subject.theta, subject.velocity))
-    end
+    # TODO move to model tests?
+    # it 'should change position' do
+    #   expect(subject.x).to eql(Gosu::offset_x(subject.theta, subject.velocity))
+    #   expect(subject.y).to eql(Gosu::offset_y(subject.theta, subject.velocity))
+    # end
   end
 end
 

@@ -6,11 +6,11 @@ module Space
     end
 
     def self.width
-      2_000
+      15_000
     end
 
     def self.height
-      2_000
+      15_000
     end
   end
 end

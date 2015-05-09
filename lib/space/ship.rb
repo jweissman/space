@@ -1,26 +1,21 @@
 module Space
   class Ship < Model
-    attr_reader :theta, :velocity
-
     # how many ticks between possible weapon firings
-    def rate_of_fire; 100 end
+    def rate_of_fire; 10 end
 
-    def move(decel=0.03)
-      @velocity ||= 0
-      @velocity -= decel
-      @velocity = 0 if @velocity < 0
+    # how fast we slow down
+    def rate_of_deceleration; 0.09 end
 
-      @x += Gosu::offset_x(@theta, @velocity)
-      @y += Gosu::offset_y(@theta, @velocity)
-    end
+    def max_flight_speed; 15.4 end
 
-    def accelerate(inc=0.3)
+    def accelerate(inc=0.9)
       @velocity ||= 0
       @velocity = @velocity + inc
+      @velocity = [max_flight_speed, @velocity].min
       self
     end
 
-    def turn(dir, rate=6) 
+    def turn(dir, rate=2.4) 
       if dir == :left
 	@theta += rate
       elsif dir == :right
@@ -29,6 +24,38 @@ module Space
 	raise "Unknown direction for turning '#{dir}'"
       end
       self
+    end
+
+    # on tick
+    def update(game,engine)
+      move
+
+      @velocity ||= 0
+      @velocity -= rate_of_deceleration
+      @velocity = 0 if @velocity < 0
+
+      handle_input(game, engine)
+    end
+
+    def fire(engine)
+      @last_fired ||= 0
+      if engine.tick - @last_fired > rate_of_fire
+	bullet = Bullet.new(x,y,theta,velocity+10)
+	engine.add_model(bullet)
+	@last_fired = engine.tick
+      end
+    end
+
+    def handle_input(game, engine)
+      if game.button_down?(Gosu::KbLeft)
+	turn(:left)
+      elsif game.button_down?(Gosu::KbRight)
+	turn(:right)
+      elsif game.button_down?(Gosu::KbUp)
+	accelerate
+      elsif game.button_down?(Gosu::KbSpace)
+	fire(engine)
+      end
     end
   end
 end
