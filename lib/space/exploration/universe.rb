@@ -5,12 +5,16 @@ module Space
         -(self.height / 2) + (rand * self.height)]
     end
 
+    def self.star_population
+      10_000
+    end
+
     def self.width
-      15_000
+      5_000
     end
 
     def self.height
-      15_000
+      5_000
     end
   end
 end

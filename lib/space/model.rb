@@ -22,5 +22,7 @@ module Space
     end
 
     def location; [ @x, @y ] end
+
+    def alive?; true end
   end
 end

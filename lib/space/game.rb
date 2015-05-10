@@ -5,7 +5,7 @@ module Space
     attr_reader :engine
 
     def initialize
-      super(1080, 720, false)
+      super(1080, 720, true)
       self.caption = 'SPAAAACE'
       @engine = GameEngine.new(self)
     end

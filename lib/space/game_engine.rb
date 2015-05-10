@@ -4,14 +4,10 @@ module Space
     attr_reader :tick, :models
     attr_reader :player, :view_manager
     
-
-    STAR_COUNT = 100
-
     def initialize(game)
       @game = game
       @models = []
 
-      # puts "--- Creating new viewport with dimensions #{@game.width}x#{@game.height}"
       @view_manager = Viewport.new(@game.width, @game.height)
 
       @player = Ship.new
@@ -20,7 +16,7 @@ module Space
       @enemy_ship = EnemyShip.new
       add_model @enemy_ship
 
-      @starfield = Array.new(STAR_COUNT) do 
+      @starfield = Array.new(Universe.star_population) do 
 	x, y = Universe.random_location
 	print '.'
 	Star.new(x,y)
@@ -37,6 +33,7 @@ module Space
 
     def step
       @tick = @tick + 1
+      @models.select!(&:alive?)
       @models.each(&method(:update_model))
     end
 
@@ -47,14 +44,13 @@ module Space
       self
     end
 
-    protected
-
     def visible_models
       @models.select(&method(:visible?))
     end
 
+    protected
     def visible?(model)
-      @view_manager.should_draw?(model)
+      @view_manager.should_draw?(model, view_for_model(model))
     end
 
     def update_model(model)
@@ -62,7 +58,7 @@ module Space
     end
 
     def render_model(model)
-      view_for_model(model).render if @view_manager.should_draw?(model)
+      view_for_model(model).render
       self
     end
 

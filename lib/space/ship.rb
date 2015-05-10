@@ -1,14 +1,14 @@
 module Space
   class Ship < Model
     # how many ticks between possible weapon firings
-    def rate_of_fire; 10 end
+    def rate_of_fire; 5 end
 
     # how fast we slow down
     def rate_of_deceleration; 0.09 end
 
-    def max_flight_speed; 15.4 end
+    def max_flight_speed; 4.5 end
 
-    def accelerate(inc=0.9)
+    def accelerate(inc=1.5)
       @velocity ||= 0
       @velocity = @velocity + inc
       @velocity = [max_flight_speed, @velocity].min
@@ -51,9 +51,13 @@ module Space
 	turn(:left)
       elsif game.button_down?(Gosu::KbRight)
 	turn(:right)
-      elsif game.button_down?(Gosu::KbUp)
+      end
+
+      if game.button_down?(Gosu::KbUp)
 	accelerate
-      elsif game.button_down?(Gosu::KbSpace)
+      end
+
+      if game.button_down?(Gosu::KbSpace)
 	fire(engine)
       end
     end

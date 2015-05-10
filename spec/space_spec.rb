@@ -21,8 +21,9 @@ describe Viewport do
 
   it 'should adjust positions accordingly' do
     image = double(:sprite)
-    expect(image).to receive(:draw_rot).with(330,250,1,0)
-    subject.render(image,10,10)
+    view = double(:view,:rendering_coordinates=>[0,0])
+    expect(image).to receive(:draw_rot).with(320,240,10,10)
+    subject.render(image,view,10,10)
   end
 end
 

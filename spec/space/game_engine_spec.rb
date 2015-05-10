@@ -20,12 +20,14 @@ describe GameEngine do
   end
   
   context '#render' do
+    before { ImageRepository.stub(:find_or_load_tiles) }
+    
     let(:viewport) do
       Viewport.new(game.width, game.height)
     end
 
     let(:visible_models) do
-      subject.models.select { |m| viewport.should_draw?(m) }
+      subject.visible_models
     end
 
     it 'should have some visible models' do
