@@ -23,6 +23,14 @@ module Space
 
     def location; [ @x, @y ] end
 
+
     def alive?; true end
+    # def die!
+    #   @dying = true 
+    # end
+
+    # def collision_with?(other_model)
+
+    # end
   end
 end

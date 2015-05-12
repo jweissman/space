@@ -38,12 +38,13 @@ describe Ship do
   end
 
   describe '#turn' do
+    let(:rate) { 1.0 }
     it 'should change the angle by the given rate' do
-      subject.turn(:left)
-      expect(subject.theta).to eql(2.4)
+      subject.turn(:left, rate)
+      expect(subject.theta).to eql(rate)
 
-      subject.turn(:right,12)
-      expect(subject.theta).to eql(-9.6)
+      subject.turn(:right, rate)
+      expect(subject.theta).to eql(0.0)
     end
   end
 

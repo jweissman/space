@@ -20,10 +20,10 @@ class Space::EnemyShip < Space::Ship
     fire(engine) if rand < 0.03
   end
 
-    def decelerate(inc=0.9)
-      @velocity ||= 0
-      @velocity = @velocity - inc
-      @velocity = [0, @velocity].max
-      self
-    end
+  def decelerate(inc=0.9)
+    @velocity ||= 0
+    @velocity = @velocity - inc
+    @velocity = [0, @velocity].max
+    self
+  end
 end

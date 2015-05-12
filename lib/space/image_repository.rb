@@ -5,7 +5,7 @@ module Space
     end
 
     def self.find_or_load(img, window, src)
-      return self.images[img] if self.images.has_key(img) 
+      return self.images[img] if self.images.has_key?(img) 
       self.images[img] = Gosu::Image.new(window, src, false)
     end
 

@@ -5,6 +5,10 @@ module Space
     def frame_width; 16 end
     def frame_height; 16 end
 
+    def current_frame
+      @selected_frame ||= (rand * @images.size).to_i 
+    end
+
     def rendering_coordinates(viewport=nil)
       if viewport
 	[(@model.x) - (viewport.x * @model.depth), 

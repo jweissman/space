@@ -6,7 +6,7 @@ module Space
     end
 
     def self.star_population
-      10_000
+      1_000
     end
 
     def self.width

@@ -4,18 +4,18 @@ module Space
     def rate_of_fire; 5 end
 
     # how fast we slow down
-    def rate_of_deceleration; 0.09 end
+    def rate_of_deceleration; 0.39 end
 
-    def max_flight_speed; 4.5 end
+    def max_flight_speed; 6.5 end
 
-    def accelerate(inc=1.5)
+    def accelerate(inc=2.5)
       @velocity ||= 0
       @velocity = @velocity + inc
       @velocity = [max_flight_speed, @velocity].min
       self
     end
 
-    def turn(dir, rate=2.4) 
+    def turn(dir, rate=3.5) 
       if dir == :left
 	@theta += rate
       elsif dir == :right
