@@ -23,14 +23,16 @@ module Space
 
     def location; [ @x, @y ] end
 
-
     def alive?; true end
-    # def die!
-    #   @dying = true 
-    # end
 
-    # def collision_with?(other_model)
+    def overlap?(other_model)
+      x_overlap = (self.x..self.x + self.width).cover?(other_model.x) || 
+	(other_model.x..(other_model.x + other_model.width)).cover?(self.x)
 
-    # end
+      y_overlap = (self.y..self.y + self.height).cover?(other_model.y) || 
+	(other_model.y..(other_model.y + other_model.height)).cover?(self.y)
+
+      return x_overlap && y_overlap
+    end
   end
 end

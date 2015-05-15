@@ -1,15 +1,16 @@
 module Space
-
   class GameEngine
     attr_reader :tick, :models
-    attr_reader :player, :view_manager
+    attr_reader :player, :bullets, :view_manager
     
     def initialize(game)
       @game = game
-      @models = []
-
       @view_manager = Viewport.new(@game.width, @game.height)
+      setup_models
+    end
 
+    def setup_models
+      @models = []
       @player = Ship.new
       add_model @player
 
@@ -23,6 +24,9 @@ module Space
       end
 
       @starfield.each(&method(:add_model))
+
+      @bullets = []
+
       @tick = 0
     end
 
@@ -33,8 +37,22 @@ module Space
 
     def step
       @tick = @tick + 1
+
+      if !@player.alive?
+	reset_game
+      end
+
+      if !@enemy_ship.alive?
+	@enemy_ship = EnemyShip.new
+	add_model @enemy_ship
+      end
+
       @models.select!(&:alive?)
       @models.each(&method(:update_model))
+    end
+
+    def reset_game
+      setup_models
     end
 
     def render

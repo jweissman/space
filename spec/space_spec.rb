@@ -60,7 +60,7 @@ describe Ship do
   end
 
   let(:engine) do
-    double(:engine)
+    double(:engine, bullets: [])
   end
 
   describe '#update' do

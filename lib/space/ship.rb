@@ -1,5 +1,14 @@
 module Space
   class Ship < Model
+    attr_reader :exploding
+
+    def initialize(*args)
+      super(*args)
+
+      @exploding = false
+      @death_countdown = nil
+    end
+
     # how many ticks between possible weapon firings
     def rate_of_fire; 5 end
 
@@ -28,19 +37,38 @@ module Space
 
     # on tick
     def update(game,engine)
-      move
+      explode! if engine.bullets.any? { |b| overlap?(b) }
 
-      @velocity ||= 0
-      @velocity -= rate_of_deceleration
-      @velocity = 0 if @velocity < 0
+      if @exploding
+	@death_countdown = @death_countdown - 1
+      else
+	move
 
-      handle_input(game, engine)
+	@velocity ||= 0
+	@velocity -= rate_of_deceleration
+	@velocity = 0 if @velocity < 0
+
+	handle_input(game, engine)
+      end
+    end
+
+    def alive?
+      return true unless @death_countdown 
+      @death_countdown > 0
+    end
+
+    def explode!
+      @exploding = true
+      @death_countdown = 30
     end
 
     def fire(engine)
       @last_fired ||= 0
       if engine.tick - @last_fired > rate_of_fire
-	bullet = Bullet.new(x,y,theta,velocity+10)
+	bullet_x = x + Gosu::offset_x(@theta, 25)
+	bullet_y = y + Gosu::offset_y(@theta, 25)
+	bullet = Bullet.new(bullet_x,bullet_y,theta,10+@velocity) #velocity+10)
+	engine.bullets << bullet
 	engine.add_model(bullet)
 	@last_fired = engine.tick
       end

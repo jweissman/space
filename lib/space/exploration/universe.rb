@@ -6,15 +6,15 @@ module Space
     end
 
     def self.star_population
-      1_000
+      3_000
     end
 
     def self.width
-      5_000
+      10_000
     end
 
     def self.height
-      5_000
+      10_000
     end
   end
 end

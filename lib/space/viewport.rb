@@ -8,9 +8,8 @@ module Space
     end
 
     def render(image, view=nil, layer=1, angle=0, color=0xFFFFFFFF)
-      #x0, y0 = view.rendering_coordinates(self)
-      _x, _y = apply_offset(view) #x0, y0)
-      image.draw_rot(_x,_y,layer,angle) #,cx,cy,fx,fy, color)
+      _x, _y = apply_offset(view)
+      image.draw_rot(_x,_y,layer,angle)
       self
     end
 
@@ -19,15 +18,13 @@ module Space
       self
     end
 
-    def should_draw?(model, view) #_x,_y,w,h)
-      ##x0, y0 = view.rendering_coordinates(self)
-      _x, _y = apply_offset(view) #x0, y0)
+    def should_draw?(model, view)
+      _x, _y = apply_offset(view)
       visible?(_x,_y,model.width,model.height)
     end
 
     protected
-    # from 'global' coords
-    def apply_offset(view) #_x,_y)
+    def apply_offset(view)
       _x, _y = view.rendering_coordinates(self)
       [_x - @x, _y - @y]
     end
